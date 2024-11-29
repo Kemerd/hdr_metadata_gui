@@ -1,6 +1,8 @@
 # GUI Version
 A Python GUI version of the YouTube HDR metadata tool
 
+![HDR Video Processor](screenshot.png)
+
 Requires Python 3.10.x installed.
 
 # Usage
