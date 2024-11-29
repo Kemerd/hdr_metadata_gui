@@ -5,8 +5,10 @@ A Python GUI version of the YouTube HDR metadata tool
 
 Requires Python 3.10.x installed.
 
+Should work on Windows, MacOS, and Linux.
+
 # Usage
-Run install_dependencies.bat or .shell
+Run install_dependencies.bat or .sh
 
 Run run_gui.bat or run_gui.sh
 
