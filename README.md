@@ -8,9 +8,11 @@ Requires Python 3.10.x installed.
 Should work on Windows, MacOS, and Linux.
 
 # Usage
-Run install_dependencies.bat or .sh
+install_dependencies.bat or .sh
 
-Run run_gui.bat or run_gui.sh
+THEN
+
+run_gui.bat or run_gui.sh
 
 Enjoy~!
 
