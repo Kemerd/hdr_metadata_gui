@@ -7,6 +7,7 @@ Requires Python 3.10.x installed.
 
 # Usage
 Run install_dependencies.bat or .shell
+
 Run run_gui.bat or run_gui.sh
 
 Enjoy~!
