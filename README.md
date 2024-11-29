@@ -1,3 +1,14 @@
+# GUI Version
+A Python GUI version of the YouTube HDR metadata tool
+
+Requires Python 3.10.x installed.
+
+# Usage
+Run install_dependencies.bat or .shell
+Run run_gui.bat or run_gui.sh
+
+Enjoy~!
+
 # Matroska Colour Metadata Ingestion Utility
 
 The utilities provided in this repository can be used to ingest colour metadata
