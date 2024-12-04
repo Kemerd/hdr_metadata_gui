@@ -28,6 +28,7 @@ class ConfigHandler:
         self.delete_original = True
         self.save_video_path = True
         self.save_lut_path = True
+        self.output_prefix = '_with_sdr_lut'  # Default prefix
         
         # Create config file if it doesn't exist
         if not os.path.exists(self.config_file):
@@ -44,6 +45,7 @@ class ConfigHandler:
                 self.delete_original = self.config['Preferences'].getboolean('delete_original', True)
                 self.save_video_path = self.config['Preferences'].getboolean('save_video_path', True)
                 self.save_lut_path = self.config['Preferences'].getboolean('save_lut_path', True)
+                self.output_prefix = self.config['Preferences'].get('output_prefix', '_with_sdr_lut')
         except Exception as e:
             print(f'[ConfigHandler.load_config] Error loading config: {str(e)}')
 
@@ -62,6 +64,7 @@ class ConfigHandler:
         self.config['Preferences']['delete_original'] = str(self.delete_original)
         self.config['Preferences']['save_video_path'] = str(self.save_video_path)
         self.config['Preferences']['save_lut_path'] = str(self.save_lut_path)
+        self.config['Preferences']['output_prefix'] = self.output_prefix
 
         try:
             with open(self.config_file, 'w') as configfile:
@@ -69,11 +72,12 @@ class ConfigHandler:
         except Exception as e:
             print(f'[ConfigHandler.save_config] Error saving config: {str(e)}')
 
-    def update_preferences(self, show_info, delete_original, save_video_path, save_lut_path):
+    def update_preferences(self, show_info, delete_original, save_video_path, save_lut_path, output_prefix):
         self.show_info = show_info
         self.delete_original = delete_original
         self.save_video_path = save_video_path
         self.save_lut_path = save_lut_path
+        self.output_prefix = output_prefix
         self.save_config()
 
     def update_video_path(self, path):
@@ -120,6 +124,7 @@ class HDRVideoProcessor:
         self.save_video_path = tk.BooleanVar(value=True)  # Default to True
         self.save_lut_path = tk.BooleanVar(value=True)    # Default to True
         self.config = ConfigHandler()  # Load configuration
+        self.output_prefix = tk.StringVar(value=self.config.output_prefix)
 
         # Initialize variables with saved preferences
         self.delete_original = tk.BooleanVar(value=self.config.delete_original)
@@ -266,7 +271,8 @@ class HDRVideoProcessor:
                 self.show_info.get(),
                 self.delete_original.get(),
                 self.save_video_path.get(),
-                self.save_lut_path.get()
+                self.save_lut_path.get(),
+                self.output_prefix.get()
             )
 
         # Bind checkbox changes to save preferences
@@ -274,6 +280,7 @@ class HDRVideoProcessor:
         self.delete_original.trace_add('write', on_preference_change)
         self.save_video_path.trace_add('write', on_preference_change)
         self.save_lut_path.trace_add('write', on_preference_change)
+        self.output_prefix.trace_add('write', on_preference_change)
 
         # Make the frame clickable
         self.video_drop_frame.bind("<Button-1>", lambda e: self.browse_video())
@@ -366,8 +373,13 @@ class HDRVideoProcessor:
                 if messagebox.askyesno("Move to Trash", 
                                      "Do you want to move the original file to trash? It will not be permanently deleted, just moved to the trash folder."):
                     try:
-                        send2trash(input_path)
-                        self._log_output("Original file moved to trash")
+                        # Convert path to absolute path and normalize it
+                        abs_path = os.path.abspath(os.path.normpath(input_path))
+                        if os.path.exists(abs_path):
+                            send2trash(abs_path)
+                            self._log_output("Original file moved to trash")
+                        else:
+                            raise FileNotFoundError(f"Could not find file: {abs_path}")
                     except Exception as e:
                         error_msg = f"Could not move file to trash: {str(e)}"
                         self._log_output(error_msg)
