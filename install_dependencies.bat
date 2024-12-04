@@ -2,6 +2,8 @@
 echo Installing Python dependencies...
 python -m pip install --upgrade pip
 python -m pip install tkinterdnd2
+python -m pip install send2trash
+python -m pip install configparser
 
 echo Creating fonts directory...
 mkdir "%LOCALAPPDATA%\Microsoft\Windows\Fonts" 2>nul

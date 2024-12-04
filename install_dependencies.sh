@@ -2,6 +2,8 @@
 echo "Installing Python dependencies..."
 python3 -m pip install --upgrade pip
 python3 -m pip install tkinterdnd2
+python3 -m pip install send2trash
+python3 -m pip install configparser
 
 echo "Creating fonts directory..."
 mkdir -p ~/.fonts
